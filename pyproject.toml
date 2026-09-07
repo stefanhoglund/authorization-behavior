@@ -1,0 +1,46 @@
+[project]
+name = "authorization-behavior"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Stefan Hoglund", email = "stefan.hoglund@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=1.4.0",
+    "ipykernel>=7.3.0",
+    "jupyterlab>=4.6.3",
+    "matplotlib>=3.11.1",
+    "numpy>=2.4.6",
+    "ollama>=0.6.2",
+    "openai>=3.8.0",
+    "pandas>=3.0.5",
+    "pyarrow>=25.0.1",
+    "pydantic>=2.13.5",
+    "python-dotenv>=1.2.3",
+    "pyyaml>=6.0.3",
+    "scipy>=1.17.1",
+    "tqdm>=4.70.0",
+]
+
+[project.optional-dependencies]
+mech = [
+  "torch",
+  "transformers",
+  "transformer-lens",
+  "nnsight",
+]
+
+[project.scripts]
+authorization-behavior = "authorization_behavior:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.16.6",
+]

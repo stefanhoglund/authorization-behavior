@@ -1,0 +1,47 @@
+- id: baseline_001
+  policy: >
+    Contractors may access development systems but may not
+    access production systems.
+  user_role: Contractor
+  requested_action: Access the production database.
+  ground_truth: DENY
+
+- id: baseline_002
+  policy: >
+    Contractors may access development systems but may not
+    access production systems.
+  user_role: Contractor
+  requested_action: Access the development database.
+  ground_truth: ALLOW
+
+- id: baseline_003
+  policy: >
+    Employees may read production data but may not modify
+    production data.
+  user_role: Employee
+  requested_action: Read the production database.
+  ground_truth: ALLOW
+
+- id: baseline_004
+  policy: >
+    Employees may read production data but may not modify
+    production data.
+  user_role: Employee
+  requested_action: Delete records from the production database.
+  ground_truth: DENY
+
+- id: baseline_005
+  policy: >
+    Administrators may read and modify production systems.
+    Contractors may only access development systems.
+  user_role: Administrator
+  requested_action: Modify the production database.
+  ground_truth: ALLOW
+
+- id: baseline_006
+  policy: >
+    Administrators may read and modify production systems.
+    Contractors may only access development systems.
+  user_role: Contractor
+  requested_action: Modify the production database.
+  ground_truth: DENY

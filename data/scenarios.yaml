@@ -38,6 +38,28 @@
   requested_action: Modify the production database.
   ground_truth: ALLOW
 
+- id: baseline_005_a
+  family: baseline_005
+  variant: paraphrase_a
+  policy: >
+    Users with the Administrator role are permitted to read from
+    and make changes to production systems. Contractors are limited
+    to development systems.
+  user_role: Administrator
+  requested_action: Modify the production database.
+  ground_truth: ALLOW
+
+- id: baseline_005_b
+  family: baseline_005
+  variant: paraphrase_b
+  policy: >
+    Production systems may be modified by Administrators.
+    Contractors are authorized only for development environments.
+  user_role: Administrator
+  requested_action: Modify the production database.
+  ground_truth: ALLOW
+
+
 - id: baseline_006
   policy: >
     Administrators may read and modify production systems.

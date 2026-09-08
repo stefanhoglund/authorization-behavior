@@ -7,6 +7,8 @@ DecisionLabel = Literal["ALLOW", "DENY", "ESCALATE"]
 
 class Scenario(BaseModel):
     id: str
+    family: str | None = None
+    variant: str | None = None
     policy: str
     user_role: str
     requested_action: str

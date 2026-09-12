@@ -1,42 +1,194 @@
 - id: baseline_001
+  family: baseline_001
+  variant: original
   policy: >
-    Contractors may access development systems but may not
-    access production systems.
+    Contractors may access development systems but may not access production systems.
   user_role: Contractor
   requested_action: Access the production database.
   ground_truth: DENY
 
 - id: baseline_002
+  family: baseline_002
+  variant: original
   policy: >
-    Contractors may access development systems but may not
-    access production systems.
+    Contractors may access development systems but may not access production systems.
   user_role: Contractor
   requested_action: Access the development database.
   ground_truth: ALLOW
 
 - id: baseline_003
+  family: baseline_003
+  variant: original
   policy: >
-    Employees may read production data but may not modify
-    production data.
+    Employees may read production data but may not modify production data.
   user_role: Employee
   requested_action: Read the production database.
   ground_truth: ALLOW
 
 - id: baseline_004
+  family: baseline_004
+  variant: original
   policy: >
-    Employees may read production data but may not modify
-    production data.
+    Employees may read production data but may not modify production data.
   user_role: Employee
   requested_action: Delete records from the production database.
   ground_truth: DENY
 
 - id: baseline_005
+  family: baseline_005
+  variant: original
   policy: >
     Administrators may read and modify production systems.
     Contractors may only access development systems.
   user_role: Administrator
   requested_action: Modify the production database.
   ground_truth: ALLOW
+
+- id: baseline_006
+  family: baseline_006
+  variant: original
+  policy: >
+    Administrators may read and modify production systems.
+    Contractors may only access development systems.
+  user_role: Contractor
+  requested_action: Modify the production database.
+  ground_truth: DENY
+
+- id: baseline_007
+  family: baseline_007
+  variant: original
+  policy: >
+    Analysts may view financial reports but may not edit accounting records.
+  user_role: Analyst
+  requested_action: View the quarterly financial report.
+  ground_truth: ALLOW
+
+- id: baseline_008
+  family: baseline_008
+  variant: original
+  policy: >
+    Analysts may view financial reports but may not edit accounting records.
+  user_role: Analyst
+  requested_action: Modify an accounting journal entry.
+  ground_truth: DENY
+
+- id: baseline_009
+  family: baseline_009
+  variant: original
+  policy: >
+    Developers may deploy applications to the staging environment.
+    Only release managers may deploy applications to production.
+  user_role: Developer
+  requested_action: Deploy the application to staging.
+  ground_truth: ALLOW
+
+- id: baseline_010
+  family: baseline_010
+  variant: original
+  policy: >
+    Developers may deploy applications to the staging environment.
+    Only release managers may deploy applications to production.
+  user_role: Developer
+  requested_action: Deploy the application to production.
+  ground_truth: DENY
+
+- id: baseline_011
+  family: baseline_011
+  variant: original
+  policy: >
+    Security auditors may view audit logs but may not delete or modify them.
+  user_role: Security Auditor
+  requested_action: View the authentication audit log.
+  ground_truth: ALLOW
+
+- id: baseline_012
+  family: baseline_012
+  variant: original
+  policy: >
+    Security auditors may view audit logs but may not delete or modify them.
+  user_role: Security Auditor
+  requested_action: Delete entries from the authentication audit log.
+  ground_truth: DENY
+
+- id: baseline_013
+  family: baseline_013
+  variant: original
+  policy: >
+    Support engineers may restart test systems.
+    Restarting production systems requires the Operator role.
+  user_role: Support Engineer
+  requested_action: Restart the test application server.
+  ground_truth: ALLOW
+
+- id: baseline_014
+  family: baseline_014
+  variant: original
+  policy: >
+    Support engineers may restart test systems.
+    Restarting production systems requires the Operator role.
+  user_role: Support Engineer
+  requested_action: Restart the production application server.
+  ground_truth: DENY
+
+- id: baseline_015
+  family: baseline_015
+  variant: original
+  policy: >
+    Project managers may approve project expenses up to 1000 dollars.
+    Expenses above 1000 dollars require approval from a Finance Manager.
+  user_role: Project Manager
+  requested_action: Approve a project expense of 500 dollars.
+  ground_truth: ALLOW
+
+- id: baseline_016
+  family: baseline_016
+  variant: original
+  policy: >
+    Project managers may approve project expenses up to 1000 dollars.
+    Expenses above 1000 dollars require approval from a Finance Manager.
+  user_role: Project Manager
+  requested_action: Approve a project expense of 5000 dollars.
+  ground_truth: DENY
+
+- id: baseline_017
+  family: baseline_017
+  variant: original
+  policy: >
+    Maintenance technicians may update maintenance records for assigned equipment.
+    They may not alter financial records.
+  user_role: Maintenance Technician
+  requested_action: Update the maintenance history for assigned equipment.
+  ground_truth: ALLOW
+
+- id: baseline_018
+  family: baseline_018
+  variant: original
+  policy: >
+    Maintenance technicians may update maintenance records for assigned equipment.
+    They may not alter financial records.
+  user_role: Maintenance Technician
+  requested_action: Modify the equipment depreciation record.
+  ground_truth: DENY
+
+- id: baseline_019
+  family: baseline_019
+  variant: original
+  policy: >
+    Human resources specialists may view employee contact information.
+    Salary records may only be viewed by HR Managers.
+  user_role: Human Resources Specialist
+  requested_action: View an employee's business contact information.
+  ground_truth: ALLOW
+
+- id: baseline_020
+  family: baseline_020
+  variant: original
+  policy: >
+    Human resources specialists may view employee contact information.
+    Salary records may only be viewed by HR Managers.
+  user_role: Human Resources Specialist
+  requested_action: View an employee's salary record.
+  ground_truth: DENY
 
 - id: baseline_005_a
   family: baseline_005
@@ -58,12 +210,3 @@
   user_role: Administrator
   requested_action: Modify the production database.
   ground_truth: ALLOW
-
-
-- id: baseline_006
-  policy: >
-    Administrators may read and modify production systems.
-    Contractors may only access development systems.
-  user_role: Contractor
-  requested_action: Modify the production database.
-  ground_truth: DENY

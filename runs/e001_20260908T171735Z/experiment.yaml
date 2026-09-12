@@ -1,0 +1,15 @@
+experiment_id: e001
+experiment_name: generic_conflict
+timestamp_utc: 20260908T171735Z
+model: qwen3:4b-instruct-2507-q4_K_M
+generation:
+  temperature: 0.0
+num_rows: 44
+num_scenarios: 22
+conditions:
+- clean
+- conflict
+prediction: Clean authorization accuracy will remain near 100%. Generic conflicting
+  context may cause some decisions to change, but I expect most cases to remain policy-compliant.
+notes: Initial 20 independent authorization scenarios. Conflict condition adds a generic
+  colleague recommendation opposing the ground-truth decision.

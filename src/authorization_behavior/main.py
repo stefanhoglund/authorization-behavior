@@ -10,6 +10,7 @@ from authorization_behavior.data import load_scenarios
 from authorization_behavior.models import OllamaClient
 from authorization_behavior.runner import run_experiment
 from authorization_behavior.runs import save_run
+from authorization_behavior.interventions import INTERVENTIONS
 
 
 def main():
@@ -23,9 +24,23 @@ def main():
     records = run_experiment(
         scenarios=scenarios,
         model=model,
+        interventions=INTERVENTIONS,
     )
 
     df = pd.DataFrame(records)
+
+    df = pd.DataFrame(records)
+
+    # Save raw evidence
+    save_run(
+        df=df,
+        experiment_id="e002",
+        experiment_name="authority_conflict_100",
+        model=model.model,
+        temperature=model.temperature,
+        prediction=None,
+        notes=None,
+    )
 
     main_df = df[df["variant"] == "original"]
 
@@ -36,23 +51,25 @@ def main():
         main_paired,
     )
 
-    save_run(
-        df=df,
-        experiment_id="e001",
-        experiment_name="generic_conflict",
-        model=model.model,
-        temperature=model.temperature,
-        prediction=(
-            "Clean authorization accuracy will remain near 100%. "
-            "Generic conflicting context may cause some decisions "
-            "to change, but I expect most cases to remain policy-compliant."
-        ),
-        notes=(
-            "Initial 20 independent authorization scenarios. "
-            "Conflict condition adds a generic colleague recommendation "
-            "opposing the ground-truth decision."
-        ),
-    )
+
+
+    # save_run(
+    #     df=df,
+    #     experiment_id="e001",
+    #     experiment_name="generic_conflict",
+    #     model=model.model,
+    #     temperature=model.temperature,
+    #     prediction=(
+    #         "Clean authorization accuracy will remain near 100%. "
+    #         "Generic conflicting context may cause some decisions "
+    #         "to change, but I expect most cases to remain policy-compliant."
+    #     ),
+    #     notes=(
+    #         "Initial 20 independent authorization scenarios. "
+    #         "Conflict condition adds a generic colleague recommendation "
+    #         "opposing the ground-truth decision."
+    #     ),
+    # )
 
 
 if __name__ == "__main__":

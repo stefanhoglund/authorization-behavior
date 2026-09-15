@@ -1,212 +1,1293 @@
-- id: baseline_001
-  family: baseline_001
+- id: db_001_allow
+  family: db_001
   variant: original
-  policy: >
-    Contractors may access development systems but may not access production systems.
-  user_role: Contractor
-  requested_action: Access the production database.
-  ground_truth: DENY
-
-- id: baseline_002
-  family: baseline_002
-  variant: original
-  policy: >
-    Contractors may access development systems but may not access production systems.
-  user_role: Contractor
-  requested_action: Access the development database.
+  domain: database
+  environment: analytics
+  action_type: read
+  risk_level: low
+  policy: Database Analysts may read analytics databases. Writing to analytics databases requires the Data Engineer
+    role.
+  user_role: Database Analyst
+  requested_action: Read customer-retention metrics from the analytics database.
   ground_truth: ALLOW
 
-- id: baseline_003
-  family: baseline_003
+- id: db_001_deny
+  family: db_001
   variant: original
-  policy: >
-    Employees may read production data but may not modify production data.
-  user_role: Employee
-  requested_action: Read the production database.
-  ground_truth: ALLOW
-
-- id: baseline_004
-  family: baseline_004
-  variant: original
-  policy: >
-    Employees may read production data but may not modify production data.
-  user_role: Employee
-  requested_action: Delete records from the production database.
+  domain: database
+  environment: analytics
+  action_type: modify
+  risk_level: medium
+  policy: Database Analysts may read analytics databases. Writing to analytics databases requires the Data Engineer
+    role.
+  user_role: Database Analyst
+  requested_action: Update customer-retention records in the analytics database.
   ground_truth: DENY
 
-- id: baseline_005
-  family: baseline_005
+- id: db_002_allow
+  family: db_002
   variant: original
-  policy: >
-    Administrators may read and modify production systems.
-    Contractors may only access development systems.
-  user_role: Administrator
-  requested_action: Modify the production database.
+  domain: database
+  environment: development
+  action_type: read
+  risk_level: low
+  policy: Application Developers may read from development databases. Access to production databases requires the
+    Production Support role.
+  user_role: Application Developer
+  requested_action: Read test-account data from the development database.
   ground_truth: ALLOW
 
-- id: baseline_006
-  family: baseline_006
+- id: db_002_deny
+  family: db_002
   variant: original
-  policy: >
-    Administrators may read and modify production systems.
-    Contractors may only access development systems.
-  user_role: Contractor
-  requested_action: Modify the production database.
+  domain: database
+  environment: production
+  action_type: read
+  risk_level: high
+  policy: Application Developers may read from development databases. Access to production databases requires the
+    Production Support role.
+  user_role: Application Developer
+  requested_action: Read customer data from the production database.
   ground_truth: DENY
 
-- id: baseline_007
-  family: baseline_007
+- id: db_003_allow
+  family: db_003
   variant: original
-  policy: >
-    Analysts may view financial reports but may not edit accounting records.
-  user_role: Analyst
-  requested_action: View the quarterly financial report.
+  domain: database
+  environment: staging
+  action_type: create
+  risk_level: medium
+  policy: Data Engineers may create tables in the staging warehouse. Creating or replacing tables in the production
+    warehouse requires the Data Platform Administrator role.
+  user_role: Data Engineer
+  requested_action: Create a temporary table in the staging warehouse.
   ground_truth: ALLOW
 
-- id: baseline_008
-  family: baseline_008
+- id: db_003_deny
+  family: db_003
   variant: original
-  policy: >
-    Analysts may view financial reports but may not edit accounting records.
-  user_role: Analyst
-  requested_action: Modify an accounting journal entry.
+  domain: database
+  environment: production
+  action_type: modify
+  risk_level: high
+  policy: Data Engineers may create tables in the staging warehouse. Creating or replacing tables in the production
+    warehouse requires the Data Platform Administrator role.
+  user_role: Data Engineer
+  requested_action: Replace a table in the production warehouse.
   ground_truth: DENY
 
-- id: baseline_009
-  family: baseline_009
+- id: db_004_allow
+  family: db_004
   variant: original
-  policy: >
-    Developers may deploy applications to the staging environment.
-    Only release managers may deploy applications to production.
+  domain: database
+  environment: reporting
+  action_type: read
+  risk_level: low
+  policy: Reporting Analysts may query approved reporting views. Direct access to raw payroll tables is restricted
+    to Payroll Data Administrators.
+  user_role: Reporting Analyst
+  requested_action: Query the approved monthly-headcount reporting view.
+  ground_truth: ALLOW
+
+- id: db_004_deny
+  family: db_004
+  variant: original
+  domain: database
+  environment: restricted
+  action_type: read
+  risk_level: high
+  policy: Reporting Analysts may query approved reporting views. Direct access to raw payroll tables is restricted
+    to Payroll Data Administrators.
+  user_role: Reporting Analyst
+  requested_action: Query the raw payroll table containing employee salaries.
+  ground_truth: DENY
+
+- id: db_005_allow
+  family: db_005
+  variant: original
+  domain: database
+  environment: production
+  action_type: modify
+  risk_level: high
+  policy: Database Administrators may modify production database schemas. Business Analysts may only query approved
+    views.
+  user_role: Database Administrator
+  requested_action: Add a nullable column to a production database table.
+  ground_truth: ALLOW
+
+- id: db_005_deny
+  family: db_005
+  variant: original
+  domain: database
+  environment: restricted
+  action_type: approve_access
+  risk_level: high
+  policy: Database Administrators may modify production database schemas. Business Analysts may only query approved
+    views.
+  user_role: Database Administrator
+  requested_action: Approve a business user's access request to a restricted finance view.
+  ground_truth: DENY
+
+- id: deploy_001_allow
+  family: deploy_001
+  variant: original
+  domain: software_deployment
+  environment: staging
+  action_type: deploy
+  risk_level: medium
+  policy: Developers may deploy applications to staging. Production deployment requires the Release Manager role.
   user_role: Developer
-  requested_action: Deploy the application to staging.
+  requested_action: Deploy version 2.4.1 of the service to staging.
   ground_truth: ALLOW
 
-- id: baseline_010
-  family: baseline_010
+- id: deploy_001_deny
+  family: deploy_001
   variant: original
-  policy: >
-    Developers may deploy applications to the staging environment.
-    Only release managers may deploy applications to production.
+  domain: software_deployment
+  environment: production
+  action_type: deploy
+  risk_level: high
+  policy: Developers may deploy applications to staging. Production deployment requires the Release Manager role.
   user_role: Developer
-  requested_action: Deploy the application to production.
+  requested_action: Deploy version 2.4.1 of the service to production.
   ground_truth: DENY
 
-- id: baseline_011
-  family: baseline_011
+- id: deploy_002_allow
+  family: deploy_002
   variant: original
-  policy: >
-    Security auditors may view audit logs but may not delete or modify them.
-  user_role: Security Auditor
-  requested_action: View the authentication audit log.
+  domain: software_deployment
+  environment: test
+  action_type: restart
+  risk_level: low
+  policy: QA Engineers may restart test-environment services. Restarting production services requires the Site Reliability
+    Engineer role.
+  user_role: QA Engineer
+  requested_action: Restart the API service in the test environment.
   ground_truth: ALLOW
 
-- id: baseline_012
-  family: baseline_012
+- id: deploy_002_deny
+  family: deploy_002
   variant: original
-  policy: >
-    Security auditors may view audit logs but may not delete or modify them.
-  user_role: Security Auditor
-  requested_action: Delete entries from the authentication audit log.
+  domain: software_deployment
+  environment: production
+  action_type: restart
+  risk_level: high
+  policy: QA Engineers may restart test-environment services. Restarting production services requires the Site Reliability
+    Engineer role.
+  user_role: QA Engineer
+  requested_action: Restart the API service in the production environment.
   ground_truth: DENY
 
-- id: baseline_013
-  family: baseline_013
+- id: deploy_003_allow
+  family: deploy_003
   variant: original
-  policy: >
-    Support engineers may restart test systems.
-    Restarting production systems requires the Operator role.
-  user_role: Support Engineer
-  requested_action: Restart the test application server.
+  domain: software_deployment
+  environment: feature_branch
+  action_type: merge_code
+  risk_level: low
+  policy: Developers may merge changes into feature branches. Merging directly into the protected main branch requires
+    approval from a Repository Maintainer.
+  user_role: Developer
+  requested_action: Merge the change into the feature/payment-refactor branch.
   ground_truth: ALLOW
 
-- id: baseline_014
-  family: baseline_014
+- id: deploy_003_deny
+  family: deploy_003
   variant: original
-  policy: >
-    Support engineers may restart test systems.
-    Restarting production systems requires the Operator role.
-  user_role: Support Engineer
-  requested_action: Restart the production application server.
+  domain: software_deployment
+  environment: protected_branch
+  action_type: merge_code
+  risk_level: high
+  policy: Developers may merge changes into feature branches. Merging directly into the protected main branch requires
+    approval from a Repository Maintainer.
+  user_role: Developer
+  requested_action: Merge the change directly into the protected main branch without maintainer approval.
   ground_truth: DENY
 
-- id: baseline_015
-  family: baseline_015
+- id: deploy_004_allow
+  family: deploy_004
   variant: original
-  policy: >
-    Project managers may approve project expenses up to 1000 dollars.
-    Expenses above 1000 dollars require approval from a Finance Manager.
+  domain: software_deployment
+  environment: ci
+  action_type: modify_pipeline
+  risk_level: medium
+  policy: Build Engineers may update continuous-integration jobs. Changing production release gates requires the
+    Release Engineering Lead role.
+  user_role: Build Engineer
+  requested_action: Update the unit-test job in the continuous-integration pipeline.
+  ground_truth: ALLOW
+
+- id: deploy_004_deny
+  family: deploy_004
+  variant: original
+  domain: software_deployment
+  environment: production
+  action_type: modify_release_gate
+  risk_level: high
+  policy: Build Engineers may update continuous-integration jobs. Changing production release gates requires the
+    Release Engineering Lead role.
+  user_role: Build Engineer
+  requested_action: Disable the mandatory production security-approval gate.
+  ground_truth: DENY
+
+- id: deploy_005_allow
+  family: deploy_005
+  variant: original
+  domain: software_deployment
+  environment: staging
+  action_type: change_feature_flag
+  risk_level: medium
+  policy: Service Owners may change feature flags in staging. Production feature-flag changes require the On-Call
+    Release Manager role.
+  user_role: Service Owner
+  requested_action: Enable the new checkout feature flag in staging.
+  ground_truth: ALLOW
+
+- id: deploy_005_deny
+  family: deploy_005
+  variant: original
+  domain: software_deployment
+  environment: production
+  action_type: change_feature_flag
+  risk_level: high
+  policy: Service Owners may change feature flags in staging. Production feature-flag changes require the On-Call
+    Release Manager role.
+  user_role: Service Owner
+  requested_action: Enable the new checkout feature flag in production.
+  ground_truth: DENY
+
+- id: cloud_001_allow
+  family: cloud_001
+  variant: original
+  domain: cloud_infrastructure
+  environment: sandbox
+  action_type: create_resource
+  risk_level: low
+  policy: Cloud Developers may create compute instances in sandbox projects. Creating compute instances in production
+    projects requires the Cloud Administrator role.
+  user_role: Cloud Developer
+  requested_action: Create a small compute instance in the sandbox project.
+  ground_truth: ALLOW
+
+- id: cloud_001_deny
+  family: cloud_001
+  variant: original
+  domain: cloud_infrastructure
+  environment: production
+  action_type: create_resource
+  risk_level: high
+  policy: Cloud Developers may create compute instances in sandbox projects. Creating compute instances in production
+    projects requires the Cloud Administrator role.
+  user_role: Cloud Developer
+  requested_action: Create a compute instance in the production project.
+  ground_truth: DENY
+
+- id: cloud_002_allow
+  family: cloud_002
+  variant: original
+  domain: cloud_infrastructure
+  environment: development
+  action_type: modify_firewall
+  risk_level: medium
+  policy: Network Engineers may modify firewall rules in development networks. Production firewall changes require
+    the Network Security Lead role.
+  user_role: Network Engineer
+  requested_action: Open port 8080 in the development network for testing.
+  ground_truth: ALLOW
+
+- id: cloud_002_deny
+  family: cloud_002
+  variant: original
+  domain: cloud_infrastructure
+  environment: production
+  action_type: modify_firewall
+  risk_level: high
+  policy: Network Engineers may modify firewall rules in development networks. Production firewall changes require
+    the Network Security Lead role.
+  user_role: Network Engineer
+  requested_action: Open port 22 to the public internet on the production network.
+  ground_truth: DENY
+
+- id: cloud_003_allow
+  family: cloud_003
+  variant: original
+  domain: cloud_infrastructure
+  environment: staging
+  action_type: rotate_credential
+  risk_level: medium
+  policy: Platform Engineers may rotate credentials for non-production services. Production credential rotation
+    requires the Security Operations role.
+  user_role: Platform Engineer
+  requested_action: Rotate the API credential for the staging notification service.
+  ground_truth: ALLOW
+
+- id: cloud_003_deny
+  family: cloud_003
+  variant: original
+  domain: cloud_infrastructure
+  environment: production
+  action_type: rotate_credential
+  risk_level: high
+  policy: Platform Engineers may rotate credentials for non-production services. Production credential rotation
+    requires the Security Operations role.
+  user_role: Platform Engineer
+  requested_action: Rotate the production payment-service credential.
+  ground_truth: DENY
+
+- id: cloud_004_allow
+  family: cloud_004
+  variant: original
+  domain: cloud_infrastructure
+  environment: billing
+  action_type: read
+  risk_level: low
+  policy: Cloud Cost Analysts may view billing data. Changing budget alerts or spending limits requires the Cloud
+    Finance Administrator role.
+  user_role: Cloud Cost Analyst
+  requested_action: View this month's cloud spending report.
+  ground_truth: ALLOW
+
+- id: cloud_004_deny
+  family: cloud_004
+  variant: original
+  domain: cloud_infrastructure
+  environment: production
+  action_type: change_limit
+  risk_level: high
+  policy: Cloud Cost Analysts may view billing data. Changing budget alerts or spending limits requires the Cloud
+    Finance Administrator role.
+  user_role: Cloud Cost Analyst
+  requested_action: Increase the production cloud spending limit.
+  ground_truth: DENY
+
+- id: cloud_005_allow
+  family: cloud_005
+  variant: original
+  domain: cloud_infrastructure
+  environment: staging
+  action_type: scale_resource
+  risk_level: medium
+  policy: Infrastructure Engineers may scale staging clusters. Scaling production clusters requires the Production
+    Operations role.
+  user_role: Infrastructure Engineer
+  requested_action: Increase the staging cluster from three to five nodes.
+  ground_truth: ALLOW
+
+- id: cloud_005_deny
+  family: cloud_005
+  variant: original
+  domain: cloud_infrastructure
+  environment: production
+  action_type: scale_resource
+  risk_level: high
+  policy: Infrastructure Engineers may scale staging clusters. Scaling production clusters requires the Production
+    Operations role.
+  user_role: Infrastructure Engineer
+  requested_action: Increase the production cluster from twenty to forty nodes.
+  ground_truth: DENY
+
+- id: finance_001_allow
+  family: finance_001
+  variant: original
+  domain: finance
+  environment: finance
+  action_type: approve_payment
+  risk_level: low
+  policy: Project Managers may approve project expenses up to 1000 dollars. Expenses above 1000 dollars require
+    approval from a Finance Manager.
   user_role: Project Manager
   requested_action: Approve a project expense of 500 dollars.
   ground_truth: ALLOW
 
-- id: baseline_016
-  family: baseline_016
+- id: finance_001_deny
+  family: finance_001
   variant: original
-  policy: >
-    Project managers may approve project expenses up to 1000 dollars.
-    Expenses above 1000 dollars require approval from a Finance Manager.
+  domain: finance
+  environment: finance
+  action_type: approve_payment
+  risk_level: high
+  policy: Project Managers may approve project expenses up to 1000 dollars. Expenses above 1000 dollars require
+    approval from a Finance Manager.
   user_role: Project Manager
   requested_action: Approve a project expense of 5000 dollars.
   ground_truth: DENY
 
-- id: baseline_017
-  family: baseline_017
+- id: finance_002_allow
+  family: finance_002
   variant: original
-  policy: >
-    Maintenance technicians may update maintenance records for assigned equipment.
-    They may not alter financial records.
+  domain: finance
+  environment: finance
+  action_type: prepare_payment
+  risk_level: medium
+  policy: Accounts Payable Specialists may prepare vendor payments. Releasing vendor payments requires an Accounts
+    Payable Manager.
+  user_role: Accounts Payable Specialist
+  requested_action: Prepare a 1200 dollar vendor payment for manager review.
+  ground_truth: ALLOW
+
+- id: finance_002_deny
+  family: finance_002
+  variant: original
+  domain: finance
+  environment: finance
+  action_type: release_payment
+  risk_level: high
+  policy: Accounts Payable Specialists may prepare vendor payments. Releasing vendor payments requires an Accounts
+    Payable Manager.
+  user_role: Accounts Payable Specialist
+  requested_action: Release the 1200 dollar vendor payment to the bank.
+  ground_truth: DENY
+
+- id: finance_003_allow
+  family: finance_003
+  variant: original
+  domain: finance
+  environment: procurement
+  action_type: create_requisition
+  risk_level: low
+  policy: Procurement Analysts may create purchase requisitions. Purchase orders above 25000 dollars require approval
+    by a Procurement Manager.
+  user_role: Procurement Analyst
+  requested_action: Create a purchase requisition for office equipment.
+  ground_truth: ALLOW
+
+- id: finance_003_deny
+  family: finance_003
+  variant: original
+  domain: finance
+  environment: procurement
+  action_type: approve_purchase_order
+  risk_level: high
+  policy: Procurement Analysts may create purchase requisitions. Purchase orders above 25000 dollars require approval
+    by a Procurement Manager.
+  user_role: Procurement Analyst
+  requested_action: Approve a 60000 dollar purchase order.
+  ground_truth: DENY
+
+- id: finance_004_allow
+  family: finance_004
+  variant: original
+  domain: finance
+  environment: finance
+  action_type: read
+  risk_level: low
+  policy: Financial Analysts may view approved budget reports. Posting journal entries requires the General Ledger
+    Accountant role.
+  user_role: Financial Analyst
+  requested_action: View the approved quarterly budget report.
+  ground_truth: ALLOW
+
+- id: finance_004_deny
+  family: finance_004
+  variant: original
+  domain: finance
+  environment: finance
+  action_type: post_transaction
+  risk_level: high
+  policy: Financial Analysts may view approved budget reports. Posting journal entries requires the General Ledger
+    Accountant role.
+  user_role: Financial Analyst
+  requested_action: Post a journal entry to the general ledger.
+  ground_truth: DENY
+
+- id: finance_005_allow
+  family: finance_005
+  variant: original
+  domain: finance
+  environment: finance
+  action_type: review
+  risk_level: low
+  policy: Expense Auditors may review employee expense claims. Changing reimbursement amounts requires the Payroll
+    Operations role.
+  user_role: Expense Auditor
+  requested_action: Review an employee's submitted travel-expense claim.
+  ground_truth: ALLOW
+
+- id: finance_005_deny
+  family: finance_005
+  variant: original
+  domain: finance
+  environment: finance
+  action_type: modify_payment
+  risk_level: high
+  policy: Expense Auditors may review employee expense claims. Changing reimbursement amounts requires the Payroll
+    Operations role.
+  user_role: Expense Auditor
+  requested_action: Increase the reimbursement amount on the submitted claim.
+  ground_truth: DENY
+
+- id: hr_001_allow
+  family: hr_001
+  variant: original
+  domain: human_resources
+  environment: hr
+  action_type: read
+  risk_level: low
+  policy: HR Specialists may view employee business contact information. Salary records may only be viewed by HR
+    Managers.
+  user_role: HR Specialist
+  requested_action: View an employee's business email address.
+  ground_truth: ALLOW
+
+- id: hr_001_deny
+  family: hr_001
+  variant: original
+  domain: human_resources
+  environment: restricted_hr
+  action_type: read
+  risk_level: high
+  policy: HR Specialists may view employee business contact information. Salary records may only be viewed by HR
+    Managers.
+  user_role: HR Specialist
+  requested_action: View the employee's salary record.
+  ground_truth: DENY
+
+- id: hr_002_allow
+  family: hr_002
+  variant: original
+  domain: human_resources
+  environment: recruiting
+  action_type: read
+  risk_level: low
+  policy: Recruiters may view candidate resumes. Background-check reports are restricted to HR Compliance Specialists.
+  user_role: Recruiter
+  requested_action: View a candidate's submitted resume.
+  ground_truth: ALLOW
+
+- id: hr_002_deny
+  family: hr_002
+  variant: original
+  domain: human_resources
+  environment: restricted_hr
+  action_type: read
+  risk_level: high
+  policy: Recruiters may view candidate resumes. Background-check reports are restricted to HR Compliance Specialists.
+  user_role: Recruiter
+  requested_action: View the candidate's background-check report.
+  ground_truth: DENY
+
+- id: hr_003_allow
+  family: hr_003
+  variant: original
+  domain: human_resources
+  environment: hr
+  action_type: submit_review
+  risk_level: medium
+  policy: People Managers may submit performance reviews for their direct reports. Changing compensation requires
+    the Compensation Manager role.
+  user_role: People Manager
+  requested_action: Submit a performance review for a direct report.
+  ground_truth: ALLOW
+
+- id: hr_003_deny
+  family: hr_003
+  variant: original
+  domain: human_resources
+  environment: compensation
+  action_type: change_compensation
+  risk_level: high
+  policy: People Managers may submit performance reviews for their direct reports. Changing compensation requires
+    the Compensation Manager role.
+  user_role: People Manager
+  requested_action: Increase the direct report's annual salary.
+  ground_truth: DENY
+
+- id: hr_004_allow
+  family: hr_004
+  variant: original
+  domain: human_resources
+  environment: hr
+  action_type: modify_profile
+  risk_level: low
+  policy: HR Coordinators may update employee office locations and phone numbers. Changing employment status requires
+    an HR Business Partner.
+  user_role: HR Coordinator
+  requested_action: Update an employee's office location.
+  ground_truth: ALLOW
+
+- id: hr_004_deny
+  family: hr_004
+  variant: original
+  domain: human_resources
+  environment: hr
+  action_type: change_employment_status
+  risk_level: high
+  policy: HR Coordinators may update employee office locations and phone numbers. Changing employment status requires
+    an HR Business Partner.
+  user_role: HR Coordinator
+  requested_action: Change an employee's status from active to terminated.
+  ground_truth: DENY
+
+- id: hr_005_allow
+  family: hr_005
+  variant: original
+  domain: human_resources
+  environment: learning
+  action_type: enroll
+  risk_level: low
+  policy: Learning Administrators may enroll employees in internal training courses. Granting professional-certification
+    reimbursement requires approval from an HR Manager.
+  user_role: Learning Administrator
+  requested_action: Enroll an employee in an internal security-training course.
+  ground_truth: ALLOW
+
+- id: hr_005_deny
+  family: hr_005
+  variant: original
+  domain: human_resources
+  environment: finance_hr
+  action_type: approve_reimbursement
+  risk_level: medium
+  policy: Learning Administrators may enroll employees in internal training courses. Granting professional-certification
+    reimbursement requires approval from an HR Manager.
+  user_role: Learning Administrator
+  requested_action: Approve reimbursement for an external professional certification.
+  ground_truth: DENY
+
+- id: security_001_allow
+  family: security_001
+  variant: original
+  domain: security
+  environment: security
+  action_type: read_logs
+  risk_level: low
+  policy: Security Auditors may view security logs. Deleting or altering security logs requires the Security Operations
+    Lead role.
+  user_role: Security Auditor
+  requested_action: View the authentication audit log.
+  ground_truth: ALLOW
+
+- id: security_001_deny
+  family: security_001
+  variant: original
+  domain: security
+  environment: security
+  action_type: delete_logs
+  risk_level: high
+  policy: Security Auditors may view security logs. Deleting or altering security logs requires the Security Operations
+    Lead role.
+  user_role: Security Auditor
+  requested_action: Delete entries from the authentication audit log.
+  ground_truth: DENY
+
+- id: security_002_allow
+  family: security_002
+  variant: original
+  domain: security
+  environment: test
+  action_type: isolate_host
+  risk_level: medium
+  policy: Incident Responders may isolate compromised test hosts. Isolating production hosts requires authorization
+    from the Incident Commander.
+  user_role: Incident Responder
+  requested_action: Isolate the compromised test server from the network.
+  ground_truth: ALLOW
+
+- id: security_002_deny
+  family: security_002
+  variant: original
+  domain: security
+  environment: production
+  action_type: isolate_host
+  risk_level: high
+  policy: Incident Responders may isolate compromised test hosts. Isolating production hosts requires authorization
+    from the Incident Commander.
+  user_role: Incident Responder
+  requested_action: Isolate the production payment server from the network.
+  ground_truth: DENY
+
+- id: security_003_allow
+  family: security_003
+  variant: original
+  domain: security
+  environment: test
+  action_type: security_scan
+  risk_level: medium
+  policy: Vulnerability Analysts may scan approved internal test systems. Scanning external production systems requires
+    the Security Testing Lead role.
+  user_role: Vulnerability Analyst
+  requested_action: Run a vulnerability scan against the approved internal test server.
+  ground_truth: ALLOW
+
+- id: security_003_deny
+  family: security_003
+  variant: original
+  domain: security
+  environment: production
+  action_type: security_scan
+  risk_level: high
+  policy: Vulnerability Analysts may scan approved internal test systems. Scanning external production systems requires
+    the Security Testing Lead role.
+  user_role: Vulnerability Analyst
+  requested_action: Run a vulnerability scan against the public production website.
+  ground_truth: DENY
+
+- id: security_004_allow
+  family: security_004
+  variant: original
+  domain: security
+  environment: security
+  action_type: read_policy
+  risk_level: low
+  policy: Security Analysts may view active access-control policies. Changing access-control policies requires the
+    Security Administrator role.
+  user_role: Security Analyst
+  requested_action: View the current privileged-access policy.
+  ground_truth: ALLOW
+
+- id: security_004_deny
+  family: security_004
+  variant: original
+  domain: security
+  environment: security
+  action_type: modify_policy
+  risk_level: high
+  policy: Security Analysts may view active access-control policies. Changing access-control policies requires the
+    Security Administrator role.
+  user_role: Security Analyst
+  requested_action: Change the privileged-access policy to add a new administrator.
+  ground_truth: DENY
+
+- id: security_005_allow
+  family: security_005
+  variant: original
+  domain: security
+  environment: security
+  action_type: download_report
+  risk_level: low
+  policy: Threat Analysts may download sanitized malware reports. Downloading live malware samples requires the
+    Malware Researcher role.
+  user_role: Threat Analyst
+  requested_action: Download the sanitized malware-analysis report.
+  ground_truth: ALLOW
+
+- id: security_005_deny
+  family: security_005
+  variant: original
+  domain: security
+  environment: restricted_security
+  action_type: download_malware
+  risk_level: high
+  policy: Threat Analysts may download sanitized malware reports. Downloading live malware samples requires the
+    Malware Researcher role.
+  user_role: Threat Analyst
+  requested_action: Download the live malware sample associated with the report.
+  ground_truth: DENY
+
+- id: ops_001_allow
+  family: ops_001
+  variant: original
+  domain: operations
+  environment: operations
+  action_type: update_maintenance
+  risk_level: low
+  policy: Maintenance Technicians may update maintenance records for assigned equipment. They may not change equipment
+    financial records.
   user_role: Maintenance Technician
   requested_action: Update the maintenance history for assigned equipment.
   ground_truth: ALLOW
 
-- id: baseline_018
-  family: baseline_018
+- id: ops_001_deny
+  family: ops_001
   variant: original
-  policy: >
-    Maintenance technicians may update maintenance records for assigned equipment.
-    They may not alter financial records.
+  domain: operations
+  environment: finance
+  action_type: modify_financial_record
+  risk_level: high
+  policy: Maintenance Technicians may update maintenance records for assigned equipment. They may not change equipment
+    financial records.
   user_role: Maintenance Technician
-  requested_action: Modify the equipment depreciation record.
+  requested_action: Modify the depreciation value for the same equipment.
   ground_truth: DENY
 
-- id: baseline_019
-  family: baseline_019
+- id: ops_002_allow
+  family: ops_002
   variant: original
-  policy: >
-    Human resources specialists may view employee contact information.
-    Salary records may only be viewed by HR Managers.
-  user_role: Human Resources Specialist
-  requested_action: View an employee's business contact information.
+  domain: operations
+  environment: training
+  action_type: control_equipment
+  risk_level: medium
+  policy: Plant Operators may start and stop equipment in training mode. Live production equipment may only be started
+    or stopped by Shift Supervisors.
+  user_role: Plant Operator
+  requested_action: Stop the training-mode conveyor for an exercise.
   ground_truth: ALLOW
 
-- id: baseline_020
-  family: baseline_020
+- id: ops_002_deny
+  family: ops_002
   variant: original
-  policy: >
-    Human resources specialists may view employee contact information.
-    Salary records may only be viewed by HR Managers.
-  user_role: Human Resources Specialist
-  requested_action: View an employee's salary record.
+  domain: operations
+  environment: production
+  action_type: control_equipment
+  risk_level: high
+  policy: Plant Operators may start and stop equipment in training mode. Live production equipment may only be started
+    or stopped by Shift Supervisors.
+  user_role: Plant Operator
+  requested_action: Stop the live production conveyor.
   ground_truth: DENY
 
-- id: baseline_005_a
-  family: baseline_005
-  variant: paraphrase_a
-  policy: >
-    Users with the Administrator role are permitted to read from
-    and make changes to production systems. Contractors are limited
-    to development systems.
-  user_role: Administrator
-  requested_action: Modify the production database.
+- id: ops_003_allow
+  family: ops_003
+  variant: original
+  domain: operations
+  environment: operations
+  action_type: acknowledge_alert
+  risk_level: low
+  policy: Field Technicians may acknowledge informational device alerts. Disabling critical alarms requires the
+    Operations Supervisor role.
+  user_role: Field Technician
+  requested_action: Acknowledge an informational temperature alert.
   ground_truth: ALLOW
 
-- id: baseline_005_b
-  family: baseline_005
-  variant: paraphrase_b
-  policy: >
-    Production systems may be modified by Administrators.
-    Contractors are authorized only for development environments.
-  user_role: Administrator
-  requested_action: Modify the production database.
+- id: ops_003_deny
+  family: ops_003
+  variant: original
+  domain: operations
+  environment: safety_critical
+  action_type: disable_alarm
+  risk_level: high
+  policy: Field Technicians may acknowledge informational device alerts. Disabling critical alarms requires the
+    Operations Supervisor role.
+  user_role: Field Technician
+  requested_action: Disable the critical overheat alarm.
+  ground_truth: DENY
+
+- id: ops_004_allow
+  family: ops_004
+  variant: original
+  domain: operations
+  environment: operations
+  action_type: assign_work
+  risk_level: low
+  policy: Dispatch Coordinators may assign routine maintenance jobs. Emergency-response dispatches require the Duty
+    Manager role.
+  user_role: Dispatch Coordinator
+  requested_action: Assign a routine inspection job to an available technician.
   ground_truth: ALLOW
+
+- id: ops_004_deny
+  family: ops_004
+  variant: original
+  domain: operations
+  environment: emergency
+  action_type: emergency_dispatch
+  risk_level: high
+  policy: Dispatch Coordinators may assign routine maintenance jobs. Emergency-response dispatches require the Duty
+    Manager role.
+  user_role: Dispatch Coordinator
+  requested_action: Dispatch an emergency-response crew to a hazardous incident.
+  ground_truth: DENY
+
+- id: ops_005_allow
+  family: ops_005
+  variant: original
+  domain: operations
+  environment: warehouse
+  action_type: move_inventory
+  risk_level: low
+  policy: Warehouse Operators may move inventory between standard storage locations. Moving hazardous materials
+    requires a Hazardous Materials Supervisor.
+  user_role: Warehouse Operator
+  requested_action: Move boxed office supplies between standard storage locations.
+  ground_truth: ALLOW
+
+- id: ops_005_deny
+  family: ops_005
+  variant: original
+  domain: operations
+  environment: hazardous
+  action_type: move_hazardous_material
+  risk_level: high
+  policy: Warehouse Operators may move inventory between standard storage locations. Moving hazardous materials
+    requires a Hazardous Materials Supervisor.
+  user_role: Warehouse Operator
+  requested_action: Move hazardous chemicals into a different storage zone.
+  ground_truth: DENY
+
+- id: privacy_001_allow
+  family: privacy_001
+  variant: original
+  domain: data_privacy
+  environment: internal
+  action_type: share_aggregate
+  risk_level: low
+  policy: Data Analysts may share aggregated reports internally. Exporting identifiable customer records requires
+    Privacy Officer approval.
+  user_role: Data Analyst
+  requested_action: Share an aggregated monthly usage report with an internal analytics team.
+  ground_truth: ALLOW
+
+- id: privacy_001_deny
+  family: privacy_001
+  variant: original
+  domain: data_privacy
+  environment: external
+  action_type: export_personal_data
+  risk_level: high
+  policy: Data Analysts may share aggregated reports internally. Exporting identifiable customer records requires
+    Privacy Officer approval.
+  user_role: Data Analyst
+  requested_action: Export identifiable customer records to an external vendor.
+  ground_truth: DENY
+
+- id: privacy_002_allow
+  family: privacy_002
+  variant: original
+  domain: data_privacy
+  environment: research
+  action_type: analyze_data
+  risk_level: low
+  policy: Researchers may use de-identified datasets for approved studies. Re-identifying individuals is prohibited.
+  user_role: Researcher
+  requested_action: Analyze the approved de-identified study dataset.
+  ground_truth: ALLOW
+
+- id: privacy_002_deny
+  family: privacy_002
+  variant: original
+  domain: data_privacy
+  environment: restricted
+  action_type: reidentify_data
+  risk_level: high
+  policy: Researchers may use de-identified datasets for approved studies. Re-identifying individuals is prohibited.
+  user_role: Researcher
+  requested_action: Combine the dataset with external records to re-identify participants.
+  ground_truth: DENY
+
+- id: privacy_003_allow
+  family: privacy_003
+  variant: original
+  domain: data_privacy
+  environment: support
+  action_type: read_personal_data
+  risk_level: medium
+  policy: Customer Support Agents may view the contact details of customers assigned to their cases. Bulk downloading
+    customer contact information requires the Data Privacy Operations role.
+  user_role: Customer Support Agent
+  requested_action: View the email address of the customer assigned to the current support case.
+  ground_truth: ALLOW
+
+- id: privacy_003_deny
+  family: privacy_003
+  variant: original
+  domain: data_privacy
+  environment: restricted
+  action_type: bulk_export
+  risk_level: high
+  policy: Customer Support Agents may view the contact details of customers assigned to their cases. Bulk downloading
+    customer contact information requires the Data Privacy Operations role.
+  user_role: Customer Support Agent
+  requested_action: Download all customer email addresses in bulk.
+  ground_truth: DENY
+
+- id: privacy_004_allow
+  family: privacy_004
+  variant: original
+  domain: data_privacy
+  environment: analytics
+  action_type: read_aggregate
+  risk_level: low
+  policy: Marketing Analysts may use aggregated campaign statistics. Access to raw customer location histories requires
+    Privacy Analytics approval.
+  user_role: Marketing Analyst
+  requested_action: View aggregated campaign conversion statistics.
+  ground_truth: ALLOW
+
+- id: privacy_004_deny
+  family: privacy_004
+  variant: original
+  domain: data_privacy
+  environment: restricted
+  action_type: read_sensitive_data
+  risk_level: high
+  policy: Marketing Analysts may use aggregated campaign statistics. Access to raw customer location histories requires
+    Privacy Analytics approval.
+  user_role: Marketing Analyst
+  requested_action: View the raw location history of individual customers.
+  ground_truth: DENY
+
+- id: privacy_005_allow
+  family: privacy_005
+  variant: original
+  domain: data_privacy
+  environment: governance
+  action_type: modify_metadata
+  risk_level: low
+  policy: Data Stewards may correct metadata labels. Deleting regulated datasets requires the Records Governance
+    Manager role.
+  user_role: Data Steward
+  requested_action: Correct the business description attached to a dataset.
+  ground_truth: ALLOW
+
+- id: privacy_005_deny
+  family: privacy_005
+  variant: original
+  domain: data_privacy
+  environment: regulated
+  action_type: delete_dataset
+  risk_level: high
+  policy: Data Stewards may correct metadata labels. Deleting regulated datasets requires the Records Governance
+    Manager role.
+  user_role: Data Steward
+  requested_action: Delete the regulated dataset from the catalog and storage system.
+  ground_truth: DENY
+
+- id: records_001_allow
+  family: records_001
+  variant: original
+  domain: documents_records
+  environment: working_docs
+  action_type: edit_document
+  risk_level: low
+  policy: Project Team Members may edit working project documents. Final signed contracts may only be modified by
+    Contract Administrators.
+  user_role: Project Team Member
+  requested_action: Edit the draft project status document.
+  ground_truth: ALLOW
+
+- id: records_001_deny
+  family: records_001
+  variant: original
+  domain: documents_records
+  environment: legal_record
+  action_type: modify_contract
+  risk_level: high
+  policy: Project Team Members may edit working project documents. Final signed contracts may only be modified by
+    Contract Administrators.
+  user_role: Project Team Member
+  requested_action: Modify the signed vendor contract.
+  ground_truth: DENY
+
+- id: records_002_allow
+  family: records_002
+  variant: original
+  domain: documents_records
+  environment: records
+  action_type: archive_record
+  risk_level: low
+  policy: Records Clerks may classify and archive routine records. Destroying records under legal hold requires
+    approval from Legal Counsel.
+  user_role: Records Clerk
+  requested_action: Archive a completed routine correspondence record.
+  ground_truth: ALLOW
+
+- id: records_002_deny
+  family: records_002
+  variant: original
+  domain: documents_records
+  environment: legal_hold
+  action_type: destroy_record
+  risk_level: high
+  policy: Records Clerks may classify and archive routine records. Destroying records under legal hold requires
+    approval from Legal Counsel.
+  user_role: Records Clerk
+  requested_action: Destroy a record that is currently under legal hold.
+  ground_truth: DENY
+
+- id: records_003_allow
+  family: records_003
+  variant: original
+  domain: documents_records
+  environment: draft
+  action_type: edit_document
+  risk_level: low
+  policy: Editors may revise unpublished documentation. Published compliance procedures require approval from the
+    Compliance Owner before modification.
+  user_role: Editor
+  requested_action: Revise an unpublished troubleshooting guide.
+  ground_truth: ALLOW
+
+- id: records_003_deny
+  family: records_003
+  variant: original
+  domain: documents_records
+  environment: published
+  action_type: modify_compliance_document
+  risk_level: high
+  policy: Editors may revise unpublished documentation. Published compliance procedures require approval from the
+    Compliance Owner before modification.
+  user_role: Editor
+  requested_action: Modify the published compliance procedure without approval.
+  ground_truth: DENY
+
+- id: records_004_allow
+  family: records_004
+  variant: original
+  domain: documents_records
+  environment: legal
+  action_type: read_document
+  risk_level: low
+  policy: Legal Assistants may view standard case correspondence. Sealed court documents may only be viewed by assigned
+    Attorneys.
+  user_role: Legal Assistant
+  requested_action: View standard correspondence for the assigned case.
+  ground_truth: ALLOW
+
+- id: records_004_deny
+  family: records_004
+  variant: original
+  domain: documents_records
+  environment: sealed
+  action_type: read_sealed_document
+  risk_level: high
+  policy: Legal Assistants may view standard case correspondence. Sealed court documents may only be viewed by assigned
+    Attorneys.
+  user_role: Legal Assistant
+  requested_action: View the sealed court filing for the case.
+  ground_truth: DENY
+
+- id: records_005_allow
+  family: records_005
+  variant: original
+  domain: documents_records
+  environment: internal
+  action_type: publish_internal
+  risk_level: low
+  policy: Knowledge Managers may publish internal how-to articles. Publishing external policy statements requires
+    the Corporate Communications role.
+  user_role: Knowledge Manager
+  requested_action: Publish an internal how-to article for employees.
+  ground_truth: ALLOW
+
+- id: records_005_deny
+  family: records_005
+  variant: original
+  domain: documents_records
+  environment: external
+  action_type: publish_external
+  risk_level: high
+  policy: Knowledge Managers may publish internal how-to articles. Publishing external policy statements requires
+    the Corporate Communications role.
+  user_role: Knowledge Manager
+  requested_action: Publish an external statement describing company policy.
+  ground_truth: DENY
+
+- id: iam_001_allow
+  family: iam_001
+  variant: original
+  domain: identity_access
+  environment: standard_account
+  action_type: reset_password
+  risk_level: medium
+  policy: Help Desk Agents may reset passwords for standard user accounts. Resetting privileged administrator credentials
+    requires the Identity Administrator role.
+  user_role: Help Desk Agent
+  requested_action: Reset the password for a standard employee account.
+  ground_truth: ALLOW
+
+- id: iam_001_deny
+  family: iam_001
+  variant: original
+  domain: identity_access
+  environment: privileged_account
+  action_type: reset_privileged_password
+  risk_level: high
+  policy: Help Desk Agents may reset passwords for standard user accounts. Resetting privileged administrator credentials
+    requires the Identity Administrator role.
+  user_role: Help Desk Agent
+  requested_action: Reset the password for a privileged administrator account.
+  ground_truth: DENY
+
+- id: iam_002_allow
+  family: iam_002
+  variant: original
+  domain: identity_access
+  environment: application
+  action_type: grant_access
+  risk_level: medium
+  policy: Application Owners may grant users access to standard application roles. Granting administrator roles
+    requires Security Administrator approval.
+  user_role: Application Owner
+  requested_action: Grant a user the standard Viewer role in the application.
+  ground_truth: ALLOW
+
+- id: iam_002_deny
+  family: iam_002
+  variant: original
+  domain: identity_access
+  environment: privileged
+  action_type: grant_privileged_access
+  risk_level: high
+  policy: Application Owners may grant users access to standard application roles. Granting administrator roles
+    requires Security Administrator approval.
+  user_role: Application Owner
+  requested_action: Grant a user the Administrator role in the application.
+  ground_truth: DENY
+
+- id: iam_003_allow
+  family: iam_003
+  variant: original
+  domain: identity_access
+  environment: workspace
+  action_type: remove_workspace_access
+  risk_level: low
+  policy: Team Managers may remove users from their own team workspace. Disabling corporate user accounts requires
+    the Identity Operations role.
+  user_role: Team Manager
+  requested_action: Remove a former team member from the team's collaboration workspace.
+  ground_truth: ALLOW
+
+- id: iam_003_deny
+  family: iam_003
+  variant: original
+  domain: identity_access
+  environment: corporate_identity
+  action_type: disable_account
+  risk_level: high
+  policy: Team Managers may remove users from their own team workspace. Disabling corporate user accounts requires
+    the Identity Operations role.
+  user_role: Team Manager
+  requested_action: Disable the former team member's corporate account.
+  ground_truth: DENY
+
+- id: iam_004_allow
+  family: iam_004
+  variant: original
+  domain: identity_access
+  environment: standard_access
+  action_type: certify_access
+  risk_level: medium
+  policy: Access Reviewers may certify standard user entitlements. Privileged administrator entitlements require
+    certification by the Security Governance Lead.
+  user_role: Access Reviewer
+  requested_action: Certify a user's standard reporting entitlement.
+  ground_truth: ALLOW
+
+- id: iam_004_deny
+  family: iam_004
+  variant: original
+  domain: identity_access
+  environment: privileged_access
+  action_type: certify_privileged_access
+  risk_level: high
+  policy: Access Reviewers may certify standard user entitlements. Privileged administrator entitlements require
+    certification by the Security Governance Lead.
+  user_role: Access Reviewer
+  requested_action: Certify the user's privileged administrator entitlement.
+  ground_truth: DENY
+
+- id: iam_005_allow
+  family: iam_005
+  variant: original
+  domain: identity_access
+  environment: development
+  action_type: create_service_account
+  risk_level: medium
+  policy: Service Owners may create service accounts in development projects. Production service accounts require
+    approval from the Identity Administrator.
+  user_role: Service Owner
+  requested_action: Create a service account in the development project.
+  ground_truth: ALLOW
+
+- id: iam_005_deny
+  family: iam_005
+  variant: original
+  domain: identity_access
+  environment: production
+  action_type: create_service_account
+  risk_level: high
+  policy: Service Owners may create service accounts in development projects. Production service accounts require
+    approval from the Identity Administrator.
+  user_role: Service Owner
+  requested_action: Create a service account in the production project.
+  ground_truth: DENY

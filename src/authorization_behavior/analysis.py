@@ -3,6 +3,11 @@
 import pandas as pd
 
 
+# src/authorization_behavior/analysis.py
+
+import pandas as pd
+
+
 def build_paired_results(df: pd.DataFrame) -> pd.DataFrame:
     paired = df.pivot(
         index="scenario_id",
@@ -10,12 +15,24 @@ def build_paired_results(df: pd.DataFrame) -> pd.DataFrame:
         values="decision",
     )
 
-    paired["flipped"] = paired["clean"] != paired["conflict"]
-
-    paired["transition"] = paired["clean"] + " -> " + paired["conflict"]
+    if "clean" not in paired.columns:
+        raise ValueError(
+            "Expected a 'clean' condition in experiment results."
+        )
 
     metadata = (
-        df[["scenario_id", "family", "variant", "ground_truth"]]
+        df[
+            [
+                "scenario_id",
+                "family",
+                "variant",
+                "domain",
+                "environment",
+                "action_type",
+                "risk_level",
+                "ground_truth",
+            ]
+        ]
         .drop_duplicates("scenario_id")
         .set_index("scenario_id")
     )
@@ -24,15 +41,40 @@ def build_paired_results(df: pd.DataFrame) -> pd.DataFrame:
         index="scenario_id",
         columns="condition",
         values="latency_seconds",
-    ).rename(
-        columns={
-            "clean": "clean_latency",
-            "conflict": "conflict_latency",
-        }
     )
 
     paired = paired.join(metadata)
-    paired = paired.join(latency)
+
+    # Compare each intervention against clean.
+    intervention_columns = [
+        column
+        for column in paired.columns
+        if column not in {
+            "clean",
+            "family",
+            "variant",
+            "domain",
+            "environment",
+            "action_type",
+            "risk_level",
+            "ground_truth",
+        }
+    ]
+
+    for condition in intervention_columns:
+        paired[f"{condition}_flipped"] = (
+            paired["clean"] != paired[condition]
+        )
+
+        paired[f"{condition}_transition"] = (
+            paired["clean"]
+            + " -> "
+            + paired[condition]
+        )
+
+    # Add latency columns with explicit names.
+    for condition in latency.columns:
+        paired[f"{condition}_latency"] = latency[condition]
 
     return paired
 
@@ -41,29 +83,66 @@ def print_experiment_summary(
     df: pd.DataFrame,
     paired: pd.DataFrame,
 ) -> None:
-    total = len(paired)
-    flips = int(paired["flipped"].sum())
+    scenarios = df["scenario_id"].nunique()
 
     print("\n=== Experiment Summary ===")
-
-    print(f"\nScenarios: {total}")
-    print(f"Flips:     {flips}/{total} ({flips / total:.1%})")
+    print(f"\nScenarios: {scenarios}")
+    print(f"Runs:      {len(df)}")
 
     print("\nAccuracy by condition:")
-    accuracy = df.groupby("condition")["correct"].mean().mul(100).round(1)
+    accuracy = (
+        df.groupby("condition")["correct"]
+        .mean()
+        .mul(100)
+        .round(1)
+    )
 
     for condition, value in accuracy.items():
-        print(f"  {condition:<10} {value:>5.1f}%")
+        print(f"  {condition:<22} {value:>5.1f}%")
 
-    print("\nTransitions:")
-    transitions = paired["transition"].value_counts()
+    print("\nFlips relative to clean:")
 
-    for transition, count in transitions.items():
-        print(f"  {transition:<18} {count}")
+    conditions = [
+        condition
+        for condition in df["condition"].unique()
+        if condition != "clean"
+    ]
 
-    print("\nAccuracy by ground truth:")
+    for condition in conditions:
+        flip_column = f"{condition}_flipped"
+        flips = int(paired[flip_column].sum())
+
+        print(
+            f"  {condition:<22} "
+            f"{flips:>3}/{scenarios} "
+            f"({flips / scenarios:.1%})"
+        )
+
+    print("\nTransitions by intervention:")
+
+    for condition in conditions:
+        transition_column = (
+            f"{condition}_transition"
+        )
+
+        print(f"\n  {condition}:")
+
+        counts = (
+            paired[transition_column]
+            .value_counts()
+        )
+
+        for transition, count in counts.items():
+            print(
+                f"    {transition:<18} {count}"
+            )
+
+    print("\nAccuracy by condition and ground truth:")
+
     directional = (
-        df.groupby(["condition", "ground_truth"])["correct"]
+        df.groupby(
+            ["condition", "ground_truth"]
+        )["correct"]
         .mean()
         .mul(100)
         .unstack()
@@ -81,37 +160,3 @@ def print_experiment_summary(
     )
 
     print(latency_summary.to_string())
-
-    print("\nScenario-level results:")
-
-    display = paired[
-        [
-            "clean",
-            "conflict",
-            "transition",
-            "flipped",
-            "clean_latency",
-            "conflict_latency",
-        ]
-    ].copy()
-
-    display["clean_latency"] = display["clean_latency"].round(3)
-
-    display["conflict_latency"] = display["conflict_latency"].round(3)
-
-    print(display.to_string())
-
-    family_summary = paired.groupby("family").agg(
-        variants=("flipped", "size"),
-        flips=("flipped", "sum"),
-    )
-
-    family_summary["any_flip"] = family_summary["flips"] > 0
-
-    print("\nFamily-level results:")
-    print(family_summary)
-
-    n_families = len(family_summary)
-    families_with_flips = family_summary["any_flip"].sum()
-
-    print(f"\nFamilies with flips: {families_with_flips}/{n_families}")

@@ -3,14 +3,19 @@
 import pandas as pd
 
 from authorization_behavior.analysis import (
+    build_flip_signature,
     build_paired_results,
+    build_scenario_similarity,
     print_experiment_summary,
 )
 from authorization_behavior.data import load_scenarios
+from authorization_behavior.interventions import INTERVENTIONS
 from authorization_behavior.models import OllamaClient
+from authorization_behavior.plotting import (
+    plot_scenario_similarity,
+)
 from authorization_behavior.runner import run_experiment
 from authorization_behavior.runs import save_run
-from authorization_behavior.interventions import INTERVENTIONS
 
 
 def main():
@@ -51,7 +56,14 @@ def main():
         main_paired,
     )
 
+    signatures = build_flip_signature(df)
 
+    similarity = build_scenario_similarity(signatures)
+
+    plot_scenario_similarity(
+        similarity,
+        "results/figures/scenario_similarity_heatmap.png",
+    )
 
     # save_run(
     #     df=df,

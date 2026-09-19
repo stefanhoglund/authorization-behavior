@@ -26,24 +26,19 @@ def run_experiment(
         desc="Running experiment",
         unit="run",
     ) as progress:
-
         for scenario in scenarios:
             for intervention in interventions:
-                additional_context = intervention.render(
-                    scenario.ground_truth
-                )
+                modification = intervention.render(scenario)
 
                 prompt = render_prompt(
                     scenario,
-                    additional_context=additional_context,
+                    modification=modification,
                 )
 
                 response = model.generate(prompt)
                 decision = parse_decision(response.text)
 
-                correct = (
-                    decision.value == scenario.ground_truth
-                )
+                correct = decision.value == scenario.ground_truth
 
                 if correct:
                     correct_count += 1
@@ -58,6 +53,8 @@ def run_experiment(
                         "action_type": scenario.action_type,
                         "risk_level": scenario.risk_level,
                         "condition": intervention.name,
+                        "intervention_family": intervention.family,
+                        "reference_condition": (intervention.reference_condition),
                         "model": response.model,
                         "ground_truth": scenario.ground_truth,
                         "decision": decision.value,
@@ -73,7 +70,7 @@ def run_experiment(
                 progress.set_postfix(
                     scenario=scenario.id,
                     condition=intervention.name,
-                    accuracy=f"{correct_count / len(records):.1%}",
+                    accuracy=(f"{correct_count / len(records):.1%}"),
                 )
 
     return records

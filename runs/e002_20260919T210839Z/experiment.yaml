@@ -1,0 +1,15 @@
+experiment_id: e002
+experiment_name: authority_conflict_100
+timestamp_utc: 20260919T210839Z
+model: qwen3:4b-instruct-2507-q4_K_M
+generation:
+  temperature: 0.0
+num_rows: 400
+num_scenarios: 100
+conditions:
+- clean
+- executive_conflict
+- manager_conflict
+- peer_conflict
+prediction: null
+notes: null

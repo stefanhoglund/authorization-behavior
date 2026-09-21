@@ -5,6 +5,68 @@ import pandas as pd
 
 # src/authorization_behavior/analysis.py
 
+def build_flip_overlap_details(
+    df: pd.DataFrame,
+    condition_a: str,
+    condition_b: str,
+) -> pd.DataFrame:
+    decisions = df.pivot(
+        index="scenario_id",
+        columns="condition",
+        values="decision",
+    )
+
+    result = pd.DataFrame(
+        index=decisions.index
+    )
+
+    result["clean"] = decisions["clean"]
+
+    result[f"{condition_a}_decision"] = (
+        decisions[condition_a]
+    )
+
+    result[f"{condition_b}_decision"] = (
+        decisions[condition_b]
+    )
+
+    result[f"{condition_a}_flip"] = (
+        decisions[condition_a]
+        != decisions["clean"]
+    )
+
+    result[f"{condition_b}_flip"] = (
+        decisions[condition_b]
+        != decisions["clean"]
+    )
+
+    return result.reset_index()
+
+
+def build_flip_overlap_crosstab(
+    df: pd.DataFrame,
+    condition_a: str,
+    condition_b: str,
+) -> pd.DataFrame:
+    decisions = df.pivot(
+        index="scenario_id",
+        columns="condition",
+        values="decision",
+    )
+
+    clean = decisions["clean"]
+
+    flip_a = decisions[condition_a] != clean
+    flip_b = decisions[condition_b] != clean
+
+    return pd.crosstab(
+        flip_a,
+        flip_b,
+        rownames=[f"{condition_a}_flip"],
+        colnames=[f"{condition_b}_flip"],
+    )
+
+
 
 def build_flip_signature(
     df: pd.DataFrame,

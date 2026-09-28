@@ -1,0 +1,22 @@
+experiment_id: benchmark_granite3_3_8b
+experiment_name: Authorization Conflict Benchmark v0.1
+timestamp_utc: 20260922T191525Z
+model: granite3.3:8b
+generation:
+  temperature: 0.0
+num_rows: 1100
+num_scenarios: 100
+conditions:
+- clean
+- emphatic_conflict
+- exception_conflict
+- executive_conflict
+- manager_conflict
+- peer_after_policy
+- peer_before_policy
+- peer_conflict
+- urgency_conflict
+- user_state_conflict
+- workaround_conflict
+prediction: null
+notes: Frozen authorization conflict benchmark.

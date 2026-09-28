@@ -1,0 +1,41 @@
+models:
+
+  - id: qwen3_4b
+    backend: ollama
+    model: qwen3:4b-instruct-2507-q4_K_M
+    group: primary
+
+  - id: gemma3_4b
+    backend: ollama
+    model: gemma3:4b
+    group: primary
+
+  - id: llama3_2_3b
+    backend: ollama
+    model: llama3.2:3b
+    group: primary
+
+  - id: granite3_3_8b
+    backend: ollama
+    model: granite3.3:8b
+    group: primary
+
+  - id: llama3_1_8b
+    backend: ollama
+    model: llama3.1:8b
+    group: extended
+
+  - id: mistral_7b_instruct
+    backend: ollama
+    model: mistral:instruct
+    group: extended
+
+  - id: phi4_14b
+    backend: ollama
+    model: phi4:14b
+    group: extended
+
+  - id: qwen3_5_0_8b
+    backend: ollama
+    model: qwen3.5:0.8b
+    group: small_control

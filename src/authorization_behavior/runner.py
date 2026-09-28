@@ -36,7 +36,10 @@ def run_experiment(
                 )
 
                 response = model.generate(prompt)
+                # decision = parse_decision(response.text)
                 decision = parse_decision(response.text)
+
+                format_valid = response.text.strip() in {"ALLOW", "DENY"}
 
                 correct = decision.value == scenario.ground_truth
 
@@ -47,24 +50,24 @@ def run_experiment(
                     {
                         "scenario_id": scenario.id,
                         "family": scenario.family,
-                        "variant": scenario.variant,
                         "domain": scenario.domain,
                         "environment": scenario.environment,
                         "action_type": scenario.action_type,
                         "risk_level": scenario.risk_level,
+                        "ground_truth": scenario.ground_truth,
                         "condition": intervention.name,
                         "intervention_family": intervention.family,
-                        "reference_condition": (intervention.reference_condition),
-                        "model": response.model,
-                        "ground_truth": scenario.ground_truth,
-                        "decision": decision.value,
-                        "correct": correct,
+                        "reference_condition": intervention.reference_condition,
+                        "model_id": model.model_id,
+                        "model_name": model.model_name,
                         "prompt": prompt,
                         "raw_response": response.text,
+                        "decision": decision,
+                        "format_valid": format_valid,
+                        "correct": decision == scenario.ground_truth,
                         "latency_seconds": response.latency_seconds,
                     }
                 )
-
                 progress.update(1)
 
                 progress.set_postfix(

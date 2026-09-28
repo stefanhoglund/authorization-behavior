@@ -1,0 +1,22 @@
+experiment_id: benchmark_gemma3_4b
+experiment_name: Authorization Conflict Benchmark v0.1
+timestamp_utc: 20260922T183152Z
+model: gemma3:4b
+generation:
+  temperature: 0.0
+num_rows: 55
+num_scenarios: 5
+conditions:
+- clean
+- emphatic_conflict
+- exception_conflict
+- executive_conflict
+- manager_conflict
+- peer_after_policy
+- peer_before_policy
+- peer_conflict
+- urgency_conflict
+- user_state_conflict
+- workaround_conflict
+prediction: null
+notes: Frozen authorization conflict benchmark.

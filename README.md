@@ -87,7 +87,9 @@ Qwen3 4B Instruct, Gemma 3 4B, Llama 3.2 3B, Granite 3.3 8B, Llama 3.1 8B, Mistr
 
 **Definition:** A *flip* is a change in the model's **semantic decision** relative to its **own clean-condition decision**, not necessarily a change from correct to incorrect. Degradation of clean-correct decisions is analyzed separately in the [report](REPORT.md).
 
-**Add the existing model × intervention flip-rate heatmap here.** The figure should be the first major graphic: it conveys the cross-model susceptibility profiles more clearly than a model ranking. Existing figure assets can be found in [`results/figures/`](results/figures/). Once the filename is confirmed, embed it as `![Model by intervention flip rates](results/figures/ACTUAL_FILENAME.png)`.
+![Model-by-intervention semantic decision flip rates](results/figures/model_intervention_flip_heatmap.png)
+
+*Figure 1. Percentage of scenarios whose semantic authorization decision changes relative to the same model’s clean-condition decision. Different models exhibit distinct susceptibility profiles.*
 
 ### 2. User-state conflict often shifts decisions toward denial
 
@@ -103,7 +105,9 @@ Qwen3 4B Instruct, Gemma 3 4B, Llama 3.2 3B, Granite 3.3 8B, Llama 3.1 8B, Mistr
 
 Six models show more `ALLOW → DENY` changes; Llama 3.1 8B shows the opposite pattern. The effect is **not universal**, and both directions occur. Matched ALLOW/DENY policy-family analyses in the [full report](REPORT.md) help characterize this asymmetry.
 
-**Add the existing directionality figure here**, using its exact filename from `results/figures/`.
+![Direction of authorization decision flips under user-state conflict](results/figures/user_state_flip_directionality.png)
+
+*Figure 2. User-state conflict shifts decisions in both directions, but six of seven models exhibit more ALLOW → DENY than DENY → ALLOW changes.*
 
 ### 3. Decision semantics and interface compliance must be measured separately
 
@@ -114,7 +118,9 @@ Some models provide an unambiguous decision but include extra explanatory text r
 
 Semantic validity ranged from **97.6% to 100%**; strict output validity ranged from **0% to 100%**. The benchmark reports both because protocol compliance matters for tool-using agents, even when the underlying decision is clear.
 
-**Add the existing protocol-validity figure here**, using its exact filename from `results/figures/`.
+![Strict output compliance versus semantic decision validity](results/figures/protocol_vs_semantic_validity.png)
+
+*Figure 3. Exact binary-output compliance varies substantially across models, even when semantic authorization decisions can usually be recovered.*
 
 ## How the research evolved
 

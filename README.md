@@ -89,7 +89,7 @@ Qwen3 4B Instruct, Gemma 3 4B, Llama 3.2 3B, Granite 3.3 8B, Llama 3.1 8B, Mistr
 
 <!-- ![Model-by-intervention semantic decision flip rates](results/figures/model_intervention_flip_heatmap.png) -->
 
-![Model-by-intervention semantic decision flip rates](image.png)
+![Model-by-intervention semantic decision flip rates](results/figures/image.png)
 
 
 *Figure 1. Percentage of scenarios whose semantic authorization decision changes relative to the same model’s clean-condition decision. Different models exhibit distinct susceptibility profiles.*
@@ -110,7 +110,7 @@ Six models show more `ALLOW → DENY` changes; Llama 3.1 8B shows the opposite p
 
 <!-- ![Direction of authorization decision flips under user-state conflict](results/figures/user_state_flip_directionality.png) -->
 
-![Direction of authorization decision flips under user-state conflict](image-1.png)
+![Direction of authorization decision flips under user-state conflict](results/figures/image-1.png)
 
 
 *Figure 2. User-state conflict shifts decisions in both directions, but six of seven models exhibit more ALLOW → DENY than DENY → ALLOW changes.*
@@ -126,7 +126,7 @@ Semantic validity ranged from **97.6% to 100%**; strict output validity ranged f
 
 <!-- ![Strict output compliance versus semantic decision validity](results/figures/protocol_vs_semantic_validity.png) -->
 
-![Strict output compliance versus semantic decision validity](image-2.png)
+![Strict output compliance versus semantic decision validity](results/figures/image-2.png)
 
 *Figure 3. Exact binary-output compliance varies substantially across models, even when semantic authorization decisions can usually be recovered.*
 

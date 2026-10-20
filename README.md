@@ -110,7 +110,7 @@ Six models show more `ALLOW → DENY` changes; Llama 3.1 8B shows the opposite p
 
 <!-- ![Direction of authorization decision flips under user-state conflict](results/figures/user_state_flip_directionality.png) -->
 
-![Direction of authorization decision flips under user-state conflict](results/figures/image-1.png)
+![Direction of authorization decision flips under user-state conflict](/results/figures/image-1.png)
 
 
 *Figure 2. User-state conflict shifts decisions in both directions, but six of seven models exhibit more ALLOW → DENY than DENY → ALLOW changes.*

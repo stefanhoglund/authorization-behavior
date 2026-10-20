@@ -87,7 +87,10 @@ Qwen3 4B Instruct, Gemma 3 4B, Llama 3.2 3B, Granite 3.3 8B, Llama 3.1 8B, Mistr
 
 **Definition:** A *flip* is a change in the model's **semantic decision** relative to its **own clean-condition decision**, not necessarily a change from correct to incorrect. Degradation of clean-correct decisions is analyzed separately in the [report](REPORT.md).
 
-![Model-by-intervention semantic decision flip rates](results/figures/model_intervention_flip_heatmap.png)
+<!-- ![Model-by-intervention semantic decision flip rates](results/figures/model_intervention_flip_heatmap.png) -->
+
+![Model-by-intervention semantic decision flip rates](image.png)
+
 
 *Figure 1. Percentage of scenarios whose semantic authorization decision changes relative to the same model’s clean-condition decision. Different models exhibit distinct susceptibility profiles.*
 
@@ -105,7 +108,10 @@ Qwen3 4B Instruct, Gemma 3 4B, Llama 3.2 3B, Granite 3.3 8B, Llama 3.1 8B, Mistr
 
 Six models show more `ALLOW → DENY` changes; Llama 3.1 8B shows the opposite pattern. The effect is **not universal**, and both directions occur. Matched ALLOW/DENY policy-family analyses in the [full report](REPORT.md) help characterize this asymmetry.
 
-![Direction of authorization decision flips under user-state conflict](results/figures/user_state_flip_directionality.png)
+<!-- ![Direction of authorization decision flips under user-state conflict](results/figures/user_state_flip_directionality.png) -->
+
+![Direction of authorization decision flips under user-state conflict](image-1.png)
+
 
 *Figure 2. User-state conflict shifts decisions in both directions, but six of seven models exhibit more ALLOW → DENY than DENY → ALLOW changes.*
 
@@ -118,7 +124,9 @@ Some models provide an unambiguous decision but include extra explanatory text r
 
 Semantic validity ranged from **97.6% to 100%**; strict output validity ranged from **0% to 100%**. The benchmark reports both because protocol compliance matters for tool-using agents, even when the underlying decision is clear.
 
-![Strict output compliance versus semantic decision validity](results/figures/protocol_vs_semantic_validity.png)
+<!-- ![Strict output compliance versus semantic decision validity](results/figures/protocol_vs_semantic_validity.png) -->
+
+![Strict output compliance versus semantic decision validity](image-2.png)
 
 *Figure 3. Exact binary-output compliance varies substantially across models, even when semantic authorization decisions can usually be recovered.*
 
@@ -128,7 +136,7 @@ The initial Qwen3 4B sweep found that peer, managerial, executive, urgency, and 
 
 The seven-model expansion then showed that user-state sensitivity was **not unique to Qwen**, but its magnitude varied considerably across models. Cross-model evaluation also exposed the need to separate semantic decisions from exact-output formatting.
 
-This progression—from hypothesis, to surprising observation, to diagnostic follow-up, to cross-model test—is documented in the [research log](research_log.md) and [full report](REPORT.md).
+This progression—from hypothesis, to surprising observation, to diagnostic follow-up, to cross-model test—is documented in the [full report](REPORT.md).
 
 ## Reproduce the benchmark
 
@@ -172,8 +180,7 @@ This would help distinguish **source ambiguity** from **asymmetric weighting of 
 
 - [Full research report](REPORT.md) — methodology, all results, limitations, and proposed experiments
 - [Figures](results/figures/) — generated visualizations
-- [Demo notebook](demo.ipynb) — interactive exploration
-- [Research log](research_log.md) — experiment evolution and decisions
+- [Demo notebooks](demo.ipynb) — interactive exploration
 - [Model configuration](config/models.yaml) and [scenario data](data/scenarios.yaml)
 
 ---

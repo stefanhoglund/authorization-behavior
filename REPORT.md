@@ -176,7 +176,10 @@ The benchmark therefore reports two separate properties:
 
 Semantic validity is 97.6-100% across the seven models, while strict output validity ranges from 0-100%. Authorization-behavior results below use semantic decisions; strict protocol compliance is retained as a separate operational metric.
 
-![][image1]  
+<!-- ![Direction of authorization decision flips under user-state conflict](/results/figures/image-1.png) -->
+
+![Direction of authorization decision flips under user-state conflict](/results/figures/image.png)
+
 *Figure 1\. Exact binary-output compliance varies dramatically across models even though semantic authorization decisions are recoverable for nearly all responses.*
 
 ## Results
@@ -196,7 +199,11 @@ Semantic clean accuracy ranges from 92% to 99%:
 | Llama 3.2 3B | 92% | 100% | 100% |
 
 This matters because large intervention effects cannot be explained simply by inability to solve the base authorization task.  
-![][image2]
+
+<!-- ![Strict output compliance versus semantic decision validity](results/figures/image-2.png) -->
+
+![Strict output compliance versus semantic decision validity](/results/figures/image-1.png)
+
 
 *Figure 2\. Semantic authorization accuracy across models and conditions. Models with similar clean accuracy can behave very differently once competing context is introduced.*
 
@@ -204,7 +211,10 @@ This matters because large intervention effects cannot be explained simply by in
 
 The central benchmark result is not a single ordering from "robust" to "fragile." Instead, different models have different **susceptibility profiles**.
 
-![][image3]  
+<!-- ![Strict output compliance versus semantic decision validity](results/figures/image-2.png) -->
+
+![Strict output compliance versus semantic decision validity](/results/figures/image-2.png)
+
 *Figure 3\. Percentage of scenarios whose semantic decision changes relative to the model's own clean decision.*
 
 Several patterns stand out:
@@ -244,7 +254,8 @@ Under user-state conflict:
 | Gemma 3 4B | 39 | 27 |
 | Llama 3.2 3B | 34 | 21 |
 
-![][image4]  
+![alt text](/results/figures/image-3.png)
+
 *Figure 4\. User-state conflict is directionally asymmetric for most tested models, although the strength and even direction of the asymmetry is model-dependent.*
 
 Six of seven models show more movement from ALLOW to DENY than from DENY to ALLOW. Llama 3.1 is the exception.
@@ -267,7 +278,8 @@ For user-state conflict, degradation rates are:
 - Mistral 7B Instruct: 62.5%  
 - Gemma 3 4B: 71.0%
 
-![][image5]  
+![alt text](/results/figures/image-4.png)
+
 *Figure 5\. Fraction of clean-correct decisions that become incorrect under emphatic or user-state conflict.*
 
 Models with similar clean accuracy therefore show dramatically different robustness once contradictory context is introduced.
@@ -288,7 +300,10 @@ Under user-state conflict:
 | Gemma 3 4B | 16 | 4 | 23 |
 | Llama 3.2 3B | 19 | 6 | 15 |
 
-![Matched-family asymmetry](figure_6_matched_family_asymmetry.png)![][image6]  
+<!-- ![Matched-family asymmetry](figure_6_matched_family_asymmetry.png)![][image6]   -->
+
+![Matched-family asymmetry](/results/figures/image-5.png)
+
 *Figure 6\. Families in which only the ALLOW member or only the DENY member changes under user-state conflict.*
 
 Five models show substantially more ALLOW-only than DENY-only susceptible families. Granite points in the same direction but has only three discordant families. Llama 3.1 shows the opposite pattern.
@@ -310,7 +325,8 @@ Several scenarios flip under user-state conflict for five of the seven models, i
 - `ops_004_allow`  
 - `records_001_allow`
 
-![][image7]  
+![alt text](/results/figures/image-6.png)
+
 *Figure 7\. The 25 scenarios with the broadest user-state susceptibility across model families.*
 
 This suggests that at least part of the phenomenon is associated with scenario structure rather than model identity alone. Shared susceptible scenarios are useful candidates for future qualitative analysis of policy wording, action semantics, and authorization-state representation.
